@@ -1,0 +1,42 @@
+swagger: '2.0'
+host: 0.0.0.0:8080
+info:
+  description: IoTex Resolver Driver
+  version: "1.0.0"
+  title: Resolver Driver
+  contact:
+    email: iotex-dev@iotex.io
+paths:
+  /1.0/identifiers/{identifier}:
+    get:
+      summary: Resolve a DID or other identifier.
+      operationId: resolve
+      parameters:
+        - in: path
+          required: true
+          name: identifier
+          type: string
+          description: A DID or other identifier to be resolved.
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/ResolutionResult"
+        '400':
+          description: invalid input!
+        '500':
+          description: error!
+definitions:
+    ResolutionResult:
+      description: The DID resolution result.
+      type: object
+      additionalProperties: false
+      properties:
+        didDocument:
+          type: object
+        resolverMetadata:
+          type: object
+        methodMetadata:
+          type: object
