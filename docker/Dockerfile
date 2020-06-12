@@ -1,13 +1,10 @@
 FROM golang:1.13.5-stretch
+ENV GO111MODULE=on
 
-WORKDIR $GOPATH/github.com/iotexproject/uni-resolver-driver-did-io
-
-RUN mkdir -p $GOPATH/github.com/iotexproject&& \
-    cd $GOPATH/github.com/iotexproject&& \
-    git clone https://github.com/iotexproject/uni-resolver-driver-did-io&& \
-    cd uni-resolver-driver-did-io&& \
-    go mod download&& \
-    go build ./src/cmd/resolver-driver-server&& \
-    cp resolver-driver-server /usr/local/bin
-
+WORKDIR apps/uni-resolver-driver-did-io
+COPY go.mod .
+COPY go.sum .
+RUN go mod download
+COPY . .
+RUN go build -o /usr/local/bin/resolver-driver-server ./src/cmd/resolver-driver-server
 CMD [ "resolver-driver-server"]
